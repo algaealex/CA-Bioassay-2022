@@ -1,0 +1,26 @@
+library(ggplot2)
+library(ggpubr)
+library(agricolae)
+library(vegan)
+
+#Data files for T Test/ ANOVA - used for Bioassay Data, comparing to controls 
+t<-read.csv(file.choose())
+anova<-read.csv(file.choose())
+
+#ttest
+t.test(t$X20AUG, t$X20AUG, paired = TRUE)
+
+#anova
+anova1 <- lm(SeptDB ~ Treatment, data = anova)
+chla.av <- aov(anova1)
+summary(chla.av)
+
+#post-hoc tukey test
+tukey.test <- TukeyHSD(chla.av)
+tukey.test
+plot(tukey.test)
+
+#another way of preforming Tukey's test
+tukey.test2 <- HSD.test(chla.av, trt = 'Treatment')
+tukey.test2
+plot(tukey.test2)
