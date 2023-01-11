@@ -1,0 +1,43 @@
+library(ggplot2)
+library(gridExtra)
+library(reshape2)
+
+septdb<-read.csv(file.choose())
+septstk<-read.csv(file.choose())
+junedb<-read.csv(file.choose())
+junestk<-read.csv(file.choose())
+
+
+
+#fancy graph
+p1<-ggplot(junedb, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
+  geom_bar(position="stack", stat="identity") +
+  scale_fill_brewer(palette = "BrBG") + 
+  scale_y_continuous(name = "June (DB)") +  scale_x_discrete(name = "")  +theme_classic()+
+  theme(legend.position = "right")
+
+p2<-ggplot(junestk, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
+  geom_bar(position="stack", stat="identity") +
+  scale_fill_brewer(palette = "BrBG") + 
+  scale_y_continuous(name = "June (STK)") +
+ scale_x_discrete(name = "") +theme_classic()+
+  theme(legend.position = "right")
+
+p3<-ggplot(septdb, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
+  geom_bar(position="stack", stat="identity") +
+  scale_fill_brewer(palette = "BrBG") + 
+  scale_y_continuous(name = "Sept (DB)") +  scale_x_discrete(name = "")   +theme_classic()+
+  theme(legend.position = "none") 
+
+p4<-ggplot(septstk, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
+  geom_bar(position="stack", stat="identity") +
+  scale_fill_brewer(palette = "BrBG") + 
+  scale_y_continuous(name = "Sept (STK)")  +theme_classic()+
+  scale_x_discrete(name = "") +theme_classic()+
+  theme(legend.position = "none")
+
+
+
+
+grid.arrange(p1,p2,p3,p4, ncol = 1)
+
