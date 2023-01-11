@@ -1,0 +1,134 @@
+library(ggplot2)
+library(gridExtra)
+
+#Either June or September Bioassay
+  #Variables = Treatment, Timepoint, Nutrients (NOx,PO4,NH4,Sil, TDN), Error Bars = NUTSstdev
+
+#Discovery Bay Data
+cali1<-read.csv(file.choose())
+
+#NOx
+p1 <- ggplot(cali1, aes(x = Treatment, y = Nox, fill = Timepoint)) +
+  geom_col(width = 0.5, position = position_dodge(width=0.6)) +
+  geom_errorbar(data = cali1, aes(ymin = Nox, ymax = Nox+NOxstdev),width=.5,position=position_dodge(.6) ) + 
+  theme_minimal() + 
+  scale_fill_brewer(palette = "Set1")+ 
+  scale_x_discrete(name = "Treatment") + 
+  scale_y_continuous(name = "NOx (ug/L)") + 
+  theme (axis.title.x=element_blank (), axis.text.x=element_blank (), axis.ticks.x=element_blank ())+ 
+  theme (legend.position = "none") 
+
+#PO4
+p2 <- ggplot(cali1, aes(x = Treatment, y = PO4, fill = Timepoint)) +  
+  geom_col(width = 0.5, position = position_dodge(width=0.6)) +
+  geom_errorbar(data = cali1, aes(ymin = PO4, ymax = PO4+PO4stdev),width=.5,position=position_dodge(.6) ) + 
+  theme_minimal() + 
+  scale_fill_brewer(palette = "Set1")+
+  scale_x_discrete(name = "Treatment") + 
+  scale_y_continuous(name = "PO4 (ug/L)") + 
+  theme (legend.position = "none")
+
+#NH4
+p3 <- ggplot(cali1, aes(x = Treatment, y = NH4, fill = Timepoint)) +  
+  geom_col(width = 0.5, position = position_dodge(width=0.6)) +
+  geom_errorbar(data = cali1, aes(ymin = NH4, ymax = NH4+NH4stev),width=.5,position=position_dodge(.6) ) + 
+  theme_minimal() + 
+  scale_fill_brewer(palette = "Set1")+
+  scale_x_discrete(name = "Treatment") + 
+  scale_y_continuous(name = "NH4 (ug/L)") + 
+  theme (legend.position = "none") + 
+  theme (axis.title.x=element_blank (), axis.text.x=element_blank (), axis.ticks.x=element_blank ()) 
+
+#Silica
+p4 <- ggplot(cali1, aes(x = Treatment, y =Sil, fill = Timepoint)) +  
+  geom_col(width = 0.5, position = position_dodge(width=0.6)) +
+  geom_errorbar(data = cali1, aes(ymin = Sil-Silstdev, ymax = Sil+Silstdev),width=.5,position=position_dodge(.6) ) + 
+  theme_minimal() + 
+  scale_fill_brewer(palette = "Set1")+
+  scale_x_discrete(name = "Treatment") + 
+  scale_y_continuous(name = "Silica (ug/L)") + 
+  theme (legend.position = "none") + 
+  theme (axis.title.x=element_blank (), axis.text.x=element_blank (), axis.ticks.x=element_blank ()) 
+
+#Total Dissolved Nitrogen
+p5 <- ggplot(cali1, aes(x = Treatment, y = TDN, fill = Timepoint)) +  
+  geom_col(width = 0.5, position = position_dodge(width=0.6)) +
+  geom_errorbar(data = cali1, aes(ymin = TDN-TDNstdev, ymax = TDN+TDNstdev),width=.5,position=position_dodge(.6) ) + 
+  theme_minimal() + 
+  scale_fill_brewer(palette = "Set1")+
+  scale_x_discrete(name = "Treatment") + 
+  scale_y_continuous(name = "TDN (ug/L)") + 
+  labs(fill='Timepoint') + 
+  theme(legend.position = "None") + 
+  theme (axis.title.x=element_blank (), axis.text.x=element_blank (), axis.ticks.x=element_blank ()) 
+
+calidb<-grid.arrange(p5,p1,p3,p4,p2, ncol = 1)
+
+#####################################################################
+
+#Stockton Data 
+cali2<-read.csv(file.choose())
+
+#NOx
+p1 <- ggplot(cali2, aes(x = Treatment, y = Nox, fill = Timepoint)) +
+  geom_col(width = 0.5, position = position_dodge(width=0.6)) +
+  geom_errorbar(data =cali2, aes(ymin = Nox, ymax = Nox+NOxstdev),width=.5,position=position_dodge(.6) ) + 
+  theme_minimal() + 
+  scale_fill_brewer(palette = "Set1")+ 
+  scale_x_discrete(name = "Treatment") + 
+  scale_y_continuous(name = "NOx (ug/L)") + 
+  theme (axis.title.x=element_blank (), axis.text.x=element_blank (), axis.ticks.x=element_blank ())+ 
+  theme (legend.position = "none") 
+
+#PO4
+p2 <- ggplot(cali2, aes(x = Treatment, y = PO4, fill = Timepoint)) +  
+  geom_col(width = 0.5, position = position_dodge(width=0.6)) +
+  geom_errorbar(data = cali2, aes(ymin = PO4, ymax = PO4+PO4stdev),width=.5,position=position_dodge(.6) ) + 
+  theme_minimal() + 
+  scale_fill_brewer(palette = "Set1")+
+  scale_x_discrete(name = "Treatment") + 
+  scale_y_continuous(name = "PO4 (ug/L)") + 
+  theme (legend.position = "none")
+
+#NH4
+p3 <- ggplot(cali2, aes(x = Treatment, y = NH4, fill = Timepoint)) +  
+  geom_col(width = 0.5, position = position_dodge(width=0.6)) +
+  geom_errorbar(data = cali2, aes(ymin = NH4, ymax = NH4+NH4stev),width=.5,position=position_dodge(.6) ) + 
+  theme_minimal() + 
+  scale_fill_brewer(palette = "Set1")+
+  scale_x_discrete(name = "Treatment") + 
+  scale_y_continuous(name = "NH4 (ug/L)") + 
+  theme (legend.position = "none") + 
+  theme (axis.title.x=element_blank (), axis.text.x=element_blank (), axis.ticks.x=element_blank ()) 
+
+#Silica
+p4 <- ggplot(cali2, aes(x = Treatment, y =Sil, fill = Timepoint)) +  
+  geom_col(width = 0.5, position = position_dodge(width=0.6)) +
+  geom_errorbar(data = cali2, aes(ymin = Sil-Silstdev, ymax = Sil+Silstdev),width=.5,position=position_dodge(.6) ) + 
+  theme_minimal() + 
+  scale_fill_brewer(palette = "Set1")+
+  scale_x_discrete(name = "Treatment") + 
+  scale_y_continuous(name = "Silica (ug/L)") + 
+  theme (legend.position = "none") + 
+  theme (axis.title.x=element_blank (), axis.text.x=element_blank (), axis.ticks.x=element_blank ()) 
+
+#Total Dissolved Nitrogen
+p5 <- ggplot(cali2, aes(x = Treatment, y = TDN, fill = Timepoint)) +  
+  geom_col(width = 0.5, position = position_dodge(width=0.6)) +
+  geom_errorbar(data = cali2, aes(ymin = TDN-TDNstdev, ymax = TDN+TDNstdev),width=.5,position=position_dodge(.6) ) + 
+  theme_minimal() + 
+  scale_fill_brewer(palette = "Set1")+
+  scale_x_discrete(name = "Treatment") + 
+  scale_y_continuous(name = "TDN (ug/L)") + 
+  labs(fill='Timepoint') + 
+  theme(legend.position = "none") + 
+  theme (axis.title.x=element_blank (), axis.text.x=element_blank (), axis.ticks.x=element_blank ()) 
+
+
+calistk<-grid.arrange(p5,p1,p3,p4,p2, ncol = 1)
+
+#Both Stockton and Discovery Bay Graphs 
+grid.arrange(calidb,calistk,ncol=2)
+
+
+
