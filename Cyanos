@@ -1,0 +1,52 @@
+library(ggplot2)
+library(gridExtra)
+library(reshape2)
+library(dplyr)
+
+
+#HPLC bioassay data - for STK & DB in June & September 2022
+septdb<-read.csv(file.choose())
+septstk<-read.csv(file.choose())
+junedb<-read.csv(file.choose())
+junestk<-read.csv(file.choose())
+
+#filter only cyanobacteria data 
+junedb2<-filter(junedb,Species == "Cyanobacteria")
+junestk2<-filter(junestk,Species == "Cyanobacteria")
+septdb2<-filter(septdb,Species == "Cyanobacteria")
+septstk2<-filter(septstk,Species == "Cyanobacteria")
+
+
+#June Discovery Bay (DB) 
+p1<-ggplot(junedb2, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
+  geom_bar(position="stack", stat="identity") +
+  scale_fill_brewer(palette = "Set2") + 
+  scale_y_continuous(name = "June (DB)") +  scale_x_discrete(name = "")  +theme_classic()+
+  theme(legend.position = "right")
+
+#June Stockton (STK)
+p2<-ggplot(junestk2, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
+  geom_bar(position="stack", stat="identity") +
+  scale_fill_brewer(palette = "Set2") + 
+  scale_y_continuous(name = "June (STK)") +
+  scale_x_discrete(name = "") +theme_classic()+
+  theme(legend.position = "right")
+
+#September Discovery Bay (DB)
+p3<-ggplot(septdb2, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
+  geom_bar(position="stack", stat="identity") +
+  scale_fill_brewer(palette = "Set2") + 
+  scale_y_continuous(name = "Sept (DB)") +  scale_x_discrete(name = "")   +theme_classic()+
+  theme(legend.position = "none") 
+
+#September Stockton (STK) 
+p4<-ggplot(septstk2, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
+  geom_bar(position="stack", stat="identity") +
+  scale_fill_brewer(palette = "Set2") + 
+  scale_y_continuous(name = "Sept (STK)")  +theme_classic()+
+  scale_x_discrete(name = "") +theme_classic()+
+  theme(legend.position = "none")
+
+
+grid.arrange(p1,p3, ncol = 1)
+
