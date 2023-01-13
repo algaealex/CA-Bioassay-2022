@@ -2,6 +2,7 @@ library(ggplot2)
 library(gridExtra)
 library(reshape2)
 library(dplyr)
+library(Rmisc) 
 
 
 #HPLC bioassay data - for STK & DB in June & September 2022
@@ -12,41 +13,52 @@ junestk<-read.csv(file.choose())
 
 #filter only cyanobacteria data 
 junedb2<-filter(junedb,Species == "Cyanobacteria")
+junedb3 <- summarySE(junedb2, measurevar="ug.L", groupvars=c("Timepoint","Pigment","Treatment"))
+
 junestk2<-filter(junestk,Species == "Cyanobacteria")
+junestk3 <- summarySE(junestk2, measurevar="ug.L", groupvars=c("Timepoint","Pigment","Treatment"))
+
 septdb2<-filter(septdb,Species == "Cyanobacteria")
+septdb3 <- summarySE(septdb2, measurevar="ug.L", groupvars=c("Timepoint","Pigment","Treatment"))
+
 septstk2<-filter(septstk,Species == "Cyanobacteria")
+septstk3 <- summarySE(septstk2, measurevar="ug.L", groupvars=c("Timepoint","Pigment","Treatment"))
 
 
 #June Discovery Bay (DB) 
-p1<-ggplot(junedb2, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
-  geom_bar(position="stack", stat="identity") +
+p1<-ggplot(junedb3, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
+  geom_bar(position=position_dodge(), stat="identity") +
+  geom_errorbar(aes(ymin=ug.L-se, ymax=ug.L+se), width=.5, position=position_dodge(.9))+
   scale_fill_brewer(palette = "Set2") + 
-  scale_y_continuous(name = "June (DB)") +  scale_x_discrete(name = "")  +theme_classic()+
+  scale_y_continuous(name = "June - DB") +  scale_x_discrete(name = "")  +theme_classic()+
   theme(legend.position = "right")
 
 #June Stockton (STK)
-p2<-ggplot(junestk2, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
-  geom_bar(position="stack", stat="identity") +
-  scale_fill_brewer(palette = "Set2") + 
-  scale_y_continuous(name = "June (STK)") +
+p2<-ggplot(junestk3, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
+  geom_bar(position=position_dodge(), stat="identity") +
+  geom_errorbar(aes(ymin=ug.L-se, ymax=ug.L+se), width=.5, position=position_dodge(.9))+
+  scale_fill_brewer(palette = "Accent") + 
+  scale_y_continuous(name = "June - STK") +
   scale_x_discrete(name = "") +theme_classic()+
   theme(legend.position = "right")
 
 #September Discovery Bay (DB)
-p3<-ggplot(septdb2, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
-  geom_bar(position="stack", stat="identity") +
+p3<-ggplot(septdb3, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
+  geom_bar(position=position_dodge(), stat="identity") +
+  geom_errorbar(aes(ymin=ug.L-se, ymax=ug.L+se), width=.5, position=position_dodge(.9))+
   scale_fill_brewer(palette = "Set2") + 
-  scale_y_continuous(name = "Sept (DB)") +  scale_x_discrete(name = "")   +theme_classic()+
+  scale_y_continuous(name = "Sept - DB") +  scale_x_discrete(name = "")   +theme_classic()+
   theme(legend.position = "none") 
 
 #September Stockton (STK) 
-p4<-ggplot(septstk2, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
-  geom_bar(position="stack", stat="identity") +
-  scale_fill_brewer(palette = "Set2") + 
-  scale_y_continuous(name = "Sept (STK)")  +theme_classic()+
+p4<-ggplot(septstk3, aes(fill=Pigment, y=ug.L, x=Timepoint)) + facet_grid(cols=vars(Treatment))+
+  geom_bar(position=position_dodge(), stat="identity") +
+  geom_errorbar(aes(ymin=ug.L-se, ymax=ug.L+se), width=.5, position=position_dodge(.9))+
+  scale_fill_brewer(palette = "Accent") + 
+  scale_y_continuous(name = "Sept - STK")  +theme_classic()+
   scale_x_discrete(name = "") +theme_classic()+
   theme(legend.position = "none")
 
 
-grid.arrange(p1,p3, ncol = 1)
+grid.arrange(p1,p3,p2,p4, ncol = 1)
 
