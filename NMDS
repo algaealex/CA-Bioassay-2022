@@ -1,0 +1,43 @@
+library(vegan)
+library(permute)
+library(ggplot2)
+
+pc<-read.csv(file.choose(), header=TRUE)
+
+#make community matrix - extract columns with abundance information
+com = pc[,6:ncol(pc)]
+
+#turn abundance data frame into a matrix
+m_com = as.matrix(com)
+
+set.seed(123)
+nmds = metaMDS(m_com, distance = "bray")
+nmds
+
+plot(nmds)
+
+#extract NMDS scores (x and y coordinates)
+data.scores = as.data.frame(scores(nmds))
+
+#extract NMDS scores (x and y coordinates) for sites from newer versions of vegan package
+data.scores = as.data.frame(scores(nmds)$sites)
+
+#add columns to data frame 
+data.scores$Treatment = pc$Treatment
+data.scores$Timepoint = pc$Timepoint
+data.scores$Site = pc$Site
+data.scores$Month = pc$Month
+data.scores$Sample = pc$Sample
+
+
+head(data.scores)
+
+
+ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + 
+  geom_point(size = 4, aes(shape = Site, color = Timepoint)) + 
+  scale_color_brewer(palette = "Dark2") + 
+  theme_classic()
+
+#Stats on NMDS Plot
+ano = anosim(m_com, pc$Month, distance = "bray", permutations = 9999)
+ano
