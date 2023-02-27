@@ -1,0 +1,63 @@
+library(ggplot2)
+library(gridExtra)
+library(reshape2)
+
+#HPLC and Nutrients data for all CA bioassays 2022 
+
+junedb<-read.csv(file.choose())
+septdb<-read.csv(file.choose())
+junestk<-read.csv(file.choose())
+septstk<-read.csv(file.choose())
+
+#Discovery Bay Bioassay
+
+p1<-ggplot(junedb) + 
+  geom_bar(aes(fill=Pigment, y=Pconc*30, x=Timepoint),position="stack", stat="identity") +
+  geom_line(aes(x=Timepoint, y=Nconc, group=Nutrients, color=Nutrients))+
+  geom_point(aes(x=Timepoint, y=Nconc, group=Nutrients, color=Nutrients, size=5))+
+  facet_grid(cols=vars(Treatment))+
+  scale_color_brewer(palette = "Dark2") + 
+  scale_fill_manual(values = c("black","#404040","#737373","#A6A6A6","dimgray","lightgray")) + 
+  scale_y_continuous(name = "Nutrients (ug/L)", sec.axis = sec_axis(~./30, name="Pigments(ug/L)")) + 
+  scale_x_discrete(name = "")  +theme_classic()+
+  theme(legend.position = "right") 
+
+p2<-ggplot(septdb) + 
+  geom_bar(aes(fill=Pigment, y=Pconc*15, x=Timepoint),position="stack", stat="identity") +
+  geom_line(aes(x=Timepoint, y=Nconc, group=Nutrients, color=Nutrients))+
+  geom_point(aes(x=Timepoint, y=Nconc, group=Nutrients, color=Nutrients, size=5))+
+  facet_grid(cols=vars(Treatment))+
+  scale_color_brewer(palette = "Dark2") + 
+  scale_fill_manual(values = c("black","#404040","#737373","#A6A6A6","dimgray","lightgray")) + 
+  scale_y_continuous(name = "Nutrients (ug/L)", sec.axis = sec_axis(~./15, name="Pigments(ug/L)")) + 
+  scale_x_discrete(name = "")  +theme_classic()+
+  theme(legend.position = "none") 
+
+grid.arrange(p1,p2, ncol = 1)
+
+##############################################################################################
+#Stockton Bioassay
+
+p3<-ggplot(junestk) + 
+  geom_bar(aes(fill=Pigment, y=Pconc*20, x=Timepoint),position="stack", stat="identity") +
+  geom_line(aes(x=Timepoint, y=Nconc, group=Nutrients, color=Nutrients))+
+  geom_point(aes(x=Timepoint, y=Nconc, group=Nutrients, color=Nutrients, size=5))+
+  facet_grid(cols=vars(Treatment))+
+  scale_color_brewer(palette = "Dark2") + 
+  scale_fill_manual(values = c("black","#404040","#737373","#A6A6A6","dimgray","lightgray")) + 
+  scale_y_continuous(name = "Nutrients (ug/L)", sec.axis = sec_axis(~./20, name="Pigments(ug/L)")) + 
+  scale_x_discrete(name = "")  +theme_classic()+
+  theme(legend.position = "right") 
+
+p4<-ggplot(septstk) + 
+  geom_bar(aes(fill=Pigment, y=Pconc*30, x=Timepoint),position="stack", stat="identity") +
+  geom_line(aes(x=Timepoint, y=Nconc, group=Nutrients, color=Nutrients))+
+  geom_point(aes(x=Timepoint, y=Nconc, group=Nutrients, color=Nutrients, size=5))+
+  facet_grid(cols=vars(Treatment))+
+  scale_color_brewer(palette = "Dark2") + 
+  scale_fill_manual(values = c("black","#404040","#737373","#A6A6A6","dimgray","lightgray")) + 
+  scale_y_continuous(name = "Nutrients (ug/L)", sec.axis = sec_axis(~./30, name="Pigments(ug/L)")) + 
+  scale_x_discrete(name = "")  +theme_classic()+
+  theme(legend.position = "right") 
+
+grid.arrange(p3,p4, ncol = 1)
